@@ -39,12 +39,12 @@ using namespace std;
 			RooRealVar* M2_shift = new RooRealVar(("M2_shift"+name).c_str(), ("M2_"+name).c_str(), 0, -0.1, 0.1); //shift of each gaussian wrt to common mean
 			RooRealVar* M3_shift = new RooRealVar(("M3_shift"+name).c_str(), ("M3_"+name).c_str(), 0, -0.1, 0.1); //shift of each gaussian wrt to common mean
 
-			RooFormulaVar* M2 = new RooFormulaVar(("M2_"+name).c_str(), "@0-@1", RooArgList(*M, *M2_shift));
-			RooFormulaVar* M3 = new RooFormulaVar(("M3_"+name).c_str(), "@0-@1", RooArgList(*M, *M3_shift));
+			RooFormulaVar* M2 = new RooFormulaVar(("M2_"+name).c_str(), "@0+@1", RooArgList(*M, *M2_shift));
+			RooFormulaVar* M3 = new RooFormulaVar(("M3_"+name).c_str(), "@0+@1", RooArgList(*M, *M3_shift));
 
-			RooRealVar* sigma1 = new RooRealVar(("sigma1_"+name).c_str(), ("sigma1_"+name).c_str(), 0.01, 0.005, 0.1);
-			RooRealVar* sigma2 = new RooRealVar(("sigma2_"+name).c_str(), ("sigma2_"+name).c_str(), 0.01, 0.005, 0.1);
-			RooRealVar* sigma3 = new RooRealVar(("sigma3_"+name).c_str(), ("sigma3_"+name).c_str(), 0.01, 0.005, 0.1);
+			RooRealVar* sigma1 = new RooRealVar(("sigma1_"+name).c_str(), ("sigma1_"+name).c_str(), 0.01, 0.002, 0.1);
+			RooRealVar* sigma2 = new RooRealVar(("sigma2_"+name).c_str(), ("sigma2_"+name).c_str(), 0.03, 0.002, 0.1);
+			RooRealVar* sigma3 = new RooRealVar(("sigma3_"+name).c_str(), ("sigma3_"+name).c_str(), 0.05, 0.002, 0.1);
 
 			RooGaussian* gau1 = new RooGaussian(("gau1_"+name).c_str(), ("gau1_"+name).c_str(), *mass, *M,*sigma1);
 			RooGaussian* gau2 = new RooGaussian(("gau2_"+name).c_str(), ("gau2_"+name).c_str(), *mass, *M2,*sigma2);

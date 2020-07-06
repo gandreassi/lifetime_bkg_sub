@@ -10,7 +10,7 @@ float fit_jpsik(TChain* data, TChain* MC, const string cut, const vector<float> 
 	auto w=full_pdf.w;
 
 	//Convert the MC to a RooFit format
-	TH1F* hMCmass = new TH1F("hMCmass", "MC mass histogram", 100, 5.1, 5.45);
+	TH1F* hMCmass = new TH1F("hMCmass", "MC mass histogram", 100, 5.15, 5.42);
 	MC->Draw("bkmm_jpsimc_mass>>hMCmass", cut.c_str(), "goff");
 	RooDataHist rooMC("rooMC", "rooMC", RooArgSet(*w->var("bkmm_jpsimc_mass")), hMCmass); //this creates a histogram, so we will go for a binned fit. RooDataSet would create an unbinned dataset.
 	cout<<"Entries in MC dataset: "<<rooMC.sumEntries()<<endl;
@@ -36,8 +36,8 @@ float fit_jpsik(TChain* data, TChain* MC, const string cut, const vector<float> 
 	rooMC.Delete();
 
 	//define the fit and integration limits
-	const float m_min_fit = 5.05;
-	const float m_max_fit = 5.7;
+	const float m_min_fit = 5.07;
+	const float m_max_fit = 5.65;
 	w->var("bkmm_jpsimc_mass")->setRange("sigRange", sig_m_range[0], sig_m_range[1]);
 	w->var("bkmm_jpsimc_mass")->setMin(m_min_fit);
 	w->var("bkmm_jpsimc_mass")->setMax(m_max_fit);
