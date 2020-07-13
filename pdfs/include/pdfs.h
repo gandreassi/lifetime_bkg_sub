@@ -52,8 +52,11 @@
 #include <RooWorkspace.h> 
 #include <RooMsgService.h> 
 #include <RooAddPdf.h> 
+#include <RooDecay.h> 
 #include <TROOT.h> 
-
+#include <RooResolutionModel.h>
+#include <RooGaussModel.h>
+#include <RooProdPdf.h>
 
 using namespace std;
 
@@ -65,12 +68,14 @@ class jpsik_pdf {
 		RooWorkspace* w;
 
 		~jpsik_pdf();
-		jpsik_pdf(string, string);
+		jpsik_pdf(string, string, string);
 		void freezeSignal();
 
 	private:
-		RooAddPdf* make_signal_model(string, RooRealVar*);
-		RooAddPdf* make_bkg_model(string, RooRealVar*);
+		RooAddPdf* make_signal_mass_model(string, RooRealVar*);
+		RooDecay* make_signal_tau_model(string, RooRealVar*);
+		RooAddPdf* make_bkg_mass_model(string, RooRealVar*);
+		RooDecay* make_bkg_tau_model(string, RooRealVar*);
 		string name;
 
 };

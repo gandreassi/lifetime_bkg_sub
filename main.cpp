@@ -10,7 +10,7 @@ int main (int argc, char *argv[]) {
 
 	//load data and MC
 	TChain* data = new TChain("Candidates");
-	data->Add("/mnt/hadoop/scratch/gandreas/NanoAOD/505/Charmonium+Run2018A-17Sep2018-v1+MINIAOD/Bukmm_flat/*.root");
+	data->Add("/mnt/hadoop/scratch/gandreas/NanoAOD/505/Charmonium+Run2018A-17Sep2018-v1+MINIAOD/Bukmm_flat/0*.root");
 	TChain* MC = new TChain("Candidates");
 	MC->Add("/mnt/hadoop/scratch/gandreas/NanoAOD/505/BuToJpsiK_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen+RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2+MINIAODSIM/MCmatch_flat_Bukmm/*.root");
 
@@ -29,6 +29,9 @@ int main (int argc, char *argv[]) {
 	float sig_frac = fit_jpsik(data, MC, cut, sig_m_range); //this function will fit jpsik on data and MC, and return the signal fraction in a given mass interval
 	// now plot with background subtraction
 	plot_bkg_sub_tau(data, MC, cut, sig_m_range, bkg_m_range, sig_frac);
+
+	//now let's do the 2D unbinned fit to m and tau
+	fit_MC_mass_lifetime(MC, cut);
 
 	return 0;
 }

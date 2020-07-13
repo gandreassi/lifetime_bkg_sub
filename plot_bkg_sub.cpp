@@ -10,7 +10,6 @@ void plot_bkg_sub_tau(TChain* data, TChain* MC, const string cut, const vector<f
 	TH1F* h_SB = new TH1F("h_SB", "S+B histogram", 50, 0,8);
 	TH1F* h_B = new TH1F("h_B", "B histogram", 50, 0,8);
 	TH1F* h_MC = new TH1F("h_MC", "MC (S) histogram", 50, 0,8);
-
 	data->Draw("1e12*bkmm_jpsimc_tau>>h_SB", full_cut_sig.c_str(), "goff");
 	data->Draw("1e12*bkmm_jpsimc_tau>>h_B", full_cut_bkg.c_str(), "goff");
 	MC->Draw("1e12*bkmm_jpsimc_tau>>h_MC", full_cut_sig.c_str(), "goff");
@@ -63,7 +62,7 @@ void plot_bkg_sub_tau(TChain* data, TChain* MC, const string cut, const vector<f
 
 	leg.Draw();
 
-	//other cosmetic changes
+	// //other cosmetic changes
 	gStyle->SetOptTitle(0);
 	gStyle->SetOptStat(false);
 	c.SetLogy();

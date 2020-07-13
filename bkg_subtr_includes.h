@@ -62,3 +62,4 @@ using namespace std;
 
 float fit_jpsik(TChain*, TChain*, const string, const vector<float>);
 void plot_bkg_sub_tau(TChain*, TChain*, const string, const vector<float>, const vector<float>, float);
+void fit_MC_mass_lifetime(TChain*, const string);

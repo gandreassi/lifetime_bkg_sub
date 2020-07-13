@@ -6,7 +6,7 @@ using namespace std;
 float fit_jpsik(TChain* data, TChain* MC, const string cut, const vector<float> sig_m_range){
 
 
-	auto full_pdf = jpsik_pdf("jpsik", "bkmm_jpsimc_mass");
+	auto full_pdf = jpsik_pdf("jpsik", "bkmm_jpsimc_mass", "bkmm_jpsimc_tau");
 	auto w=full_pdf.w;
 
 	//Convert the MC to a RooFit format
@@ -16,7 +16,7 @@ float fit_jpsik(TChain* data, TChain* MC, const string cut, const vector<float> 
 	cout<<"Entries in MC dataset: "<<rooMC.sumEntries()<<endl;
 
 	//take the signal-only pdf and fit it to the MC
-	auto signal_only_pdf = w->pdf("signalModel_jpsik");
+	auto signal_only_pdf = w->pdf("signalModel_m_jpsik");
 	signal_only_pdf->fitTo(rooMC);
 
 	//let's plot stuff. I suggest move this to a separate function.
@@ -31,13 +31,12 @@ float fit_jpsik(TChain* data, TChain* MC, const string cut, const vector<float> 
 	//ok, now we got the signal shape. Let's fix its parameters and apply this shape to fit the data
 	full_pdf.freezeSignal(); //go check in pdfs.cpp what this does.
 
-
 	//now we can cleanup the memory and load the actual data
 	rooMC.Delete();
 
 	//define the fit and integration limits
 	const float m_min_fit = 5.07;
-	const float m_max_fit = 5.65;
+	const float m_max_fit = 5.6;
 	w->var("bkmm_jpsimc_mass")->setRange("sigRange", sig_m_range[0], sig_m_range[1]);
 	w->var("bkmm_jpsimc_mass")->setMin(m_min_fit);
 	w->var("bkmm_jpsimc_mass")->setMax(m_max_fit);
@@ -51,7 +50,7 @@ float fit_jpsik(TChain* data, TChain* MC, const string cut, const vector<float> 
 	cout<<"Entries in data dataset: "<<roodata.sumEntries()<<endl;
 
 	//take the signal-only pdf and fit it to the MC
-	auto SB_pdf = w->pdf("jpsik");
+	auto SB_pdf = w->pdf("jpsik_m");
 	SB_pdf->fitTo(roodata);
 
 	//let's plot stuff. I suggest move this to a separate function.
@@ -65,12 +64,12 @@ float fit_jpsik(TChain* data, TChain* MC, const string cut, const vector<float> 
 	////////
 	auto mass_var = w->var("bkmm_jpsimc_mass");
 
-	float sig_int = (w->var("N_sig_jpsik")->getVal())*(w->pdf("signalModel_jpsik")->createIntegral(RooArgSet(*mass_var),RooFit::NormSet(*mass_var),RooFit::Range("sigRange"))->getVal());
-	float bkg_int = (w->var("N_bkg_jpsik")->getVal())*(w->pdf("bkgModel_jpsik")->createIntegral(RooArgSet(*mass_var),RooFit::NormSet(*mass_var),RooFit::Range("sigRange"))->getVal());
+	float sig_int = (w->var("N_sig_jpsik")->getVal())*(w->pdf("signalModel_m_jpsik")->createIntegral(RooArgSet(*mass_var),RooFit::NormSet(*mass_var),RooFit::Range("sigRange"))->getVal());
+	float bkg_int = (w->var("N_bkg_jpsik")->getVal())*(w->pdf("bkgModel_m_jpsik")->createIntegral(RooArgSet(*mass_var),RooFit::NormSet(*mass_var),RooFit::Range("sigRange"))->getVal());
 	cout<<"signal integral in signal mass range = "<<sig_int<<endl;
 	cout<<"background integral in signal mass range = "<<bkg_int<<endl;
-	float tot_int = (roodata.sumEntries())*(w->pdf("jpsik")->createIntegral(RooArgSet(*mass_var),RooFit::NormSet(*mass_var),RooFit::Range("sigRange"))->getVal());
-	cout<<"Cross-check. Does the some of the two make the total, within good approximation? N_bkg+N_sig-Ntot is = "<<bkg_int+sig_int-tot_int<<endl;
+	float tot_int = (roodata.sumEntries())*(w->pdf("jpsik_m")->createIntegral(RooArgSet(*mass_var),RooFit::NormSet(*mass_var),RooFit::Range("sigRange"))->getVal());
+	cout<<"Cross-check. Does the sum of the two make the total, within good approximation? N_bkg+N_sig-Ntot is = "<<bkg_int+sig_int-tot_int<<endl;
 
 	return sig_int/(sig_int+bkg_int);
 } 
